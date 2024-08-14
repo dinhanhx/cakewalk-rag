@@ -20,6 +20,7 @@ query_embedding = (
 query_result = upstash_index.query(query_embedding, top_k=1, include_metadata=True)
 source_metadata = query_result[0].metadata
 
+# Retrieve the source
 with jsonlines.open("data/articles.jsonl") as reader:
     for article_id, i in enumerate(reader):
         if article_id == source_metadata["article_id"]:
@@ -28,6 +29,7 @@ with jsonlines.open("data/articles.jsonl") as reader:
             paragraph = i["content"][source_metadata["paragraph_id"]]
             print(f"Paragraph: {paragraph}")
 
+# Augment the context
 instruction = f"""Answer the following question based on the context below.
 
 Question:
@@ -36,6 +38,8 @@ Question:
 Context:
 {paragraph}
 """
+
+# Generate the response
 chat_response = mistral_client.chat.complete(
     model="open-mistral-nemo",
     messages=[
