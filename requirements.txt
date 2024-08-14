@@ -1,0 +1,6 @@
+scrapy
+mistralai
+python-dotenv
+jsonlines
+upstash-vector
+tqdm
